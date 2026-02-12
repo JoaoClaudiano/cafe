@@ -375,6 +375,13 @@
       transition: var(--transition);
       font-size: 1.3rem;
     }
+    .hero-image {
+      width: 100%;
+      height: 90vh;
+      object-fit: cover;
+      filter: saturate(1.1) contrast(1.05) brightness(1.02);
+      mix-blend-mode: multiply; /* ou overlay, dependendo do fundo */
+    }
     .social a:hover {
       background: var(--color-gold);
       color: var(--color-brown);
@@ -385,6 +392,20 @@
       border-top: 1px solid rgba(255,255,255,0.1);
       padding-top: 1.8rem;
       font-size: 0.95rem;
+    }
+    * {
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+    
+    [data-aos] {
+      transition-duration: 0.8s !important;
+      transition-property: transform, opacity, filter !important;
+    }
+    
+    /* Efeito "nudge" em botões */
+    .btn:hover {
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.15);
     }
     /* MOBILE STYLES */
     @media screen and (max-width: 768px) {
@@ -471,6 +492,25 @@
     [data-aos] {
       transition-timing-function: ease-out;
     }
+    <section id="home" class="hero" style="
+      background: radial-gradient(ellipse at 80% 40%, #fff7e6 0%, #fae9d8 40%, #dbb88c 100%);
+      position: relative;
+      overflow: hidden;
+      <div style="position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0.03; background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>'); mix-blend-mode: multiply;"></div>
+      
+      <!-- Bolhas de luz abstratas (como no site da Shopify) -->
+      <div style="position: absolute; top: -10%; left: -5%; width: 60%; height: 80%; background: radial-gradient(circle, rgba(255,235,215,0.5) 0%, rgba(255,235,215,0) 70%); border-radius: 50%; filter: blur(80px);"></div>
+      <div style="position: absolute; bottom: -20%; right: -5%; width: 70%; height: 90%; background: radial-gradient(circle, rgba(215,170,130,0.35) 0%, rgba(215,170,130,0) 70%); border-radius: 50%; filter: blur(100px);"></div>
+      
+      <div class="hero-content" style="position: relative; z-index: 10; text-align: center; max-width: 900px; margin: 0 auto; padding: 8rem 1.5rem;">
+        <span style="font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; color: #7a5a44; background: rgba(255,255,240,0.5); backdrop-filter: blur(4px); padding: 0.5rem 1.2rem; border-radius: 40px; display: inline-block; margin-bottom: 1.5rem;">✨ Winter '26 — Paris Édition</span>
+        <h1 style="font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 700; line-height: 1; color: #3a2c1f; margin-bottom: 1.2rem; text-shadow: 0 4px 20px rgba(255,255,240,0.4);">Paris em<br>cada gole</h1>
+        <p style="font-size: 1.4rem; font-weight: 320; color: #4e3b2b; max-width: 600px; margin: 0 auto 2.5rem; opacity: 0.9;">Café especial · Croissants · Arte & aconchego</p>
+        <a href="#cardapio" class="btn" style="background: #2c3e2f; color: #fff9ef; border: none; padding: 1rem 3rem; font-size: 1.1rem; border-radius: 50px; box-shadow: 0 10px 25px -8px rgba(44,62,47,0.3); transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);">Descobrir o menu →</a>
+      </div>
+    </section>
+
+    
   </style>
 </head>
 <body>
