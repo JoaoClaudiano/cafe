@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <title>Café Belle Vue — Édition Winter '26</title>
   <!-- Google Fonts: Inter + Playfair Display -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -11,13 +11,13 @@
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ---------- VARIÁVEIS & RESET (Estética Shopify Editions) ---------- */
+    /* ---------- VARIÁVEIS & RESET (Shopify Editions DNA) ---------- */
     :root {
-      --color-deep-espresso: #2c3e2f;    /* verde musgo elegante, como o fundo da Shopify */
-      --color-cream: #fff9ef;            /* base creme clara */
-      --color-warm-latte: #fae9d8;       /* fundo suave para seções */
-      --color-caramel: #b78c5a;          /* dourado assinatura */
-      --color-mocha: #7a5a44;           /* para textos secundários */
+      --color-deep-espresso: #2c3e2f;
+      --color-cream: #fff9ef;
+      --color-warm-latte: #fae9d8;
+      --color-caramel: #b78c5a;
+      --color-mocha: #7a5a44;
       --color-soft-black: #2c2c2c;
       --color-white: #ffffff;
       --shadow-sm: 0 8px 30px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.02);
@@ -40,6 +40,7 @@
       color: var(--color-soft-black);
       line-height: 1.5;
       font-weight: 350;
+      overflow-x: hidden;
     }
     h1, h2, h3, h4 {
       font-family: 'Playfair Display', serif;
@@ -64,7 +65,7 @@
     * {
       transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
     }
-    /* ---------- TIPOGRAFIA COM ESPAÇAMENTO GENEROSO ---------- */
+    /* ---------- TIPOGRAFIA COM ESPAÇAMENTO ---------- */
     .section-title {
       font-size: 3.2rem;
       color: var(--color-deep-espresso);
@@ -89,7 +90,7 @@
       background-color: var(--color-caramel);
       border-radius: 4px;
     }
-    /* ---------- BOTÃO COM NUDGE (microinteração) ---------- */
+    /* ---------- BOTÃO COM NUDGE ---------- */
     .btn {
       display: inline-block;
       background-color: var(--color-deep-espresso);
@@ -110,7 +111,7 @@
       transform: scale(1.02) translateY(-3px);
       box-shadow: 0 20px 35px -12px rgba(44,62,47,0.2);
     }
-    /* ---------- NAVBAR (translúcida com blur) ---------- */
+    /* ---------- NAVBAR ---------- */
     .navbar {
       position: sticky;
       top: 0;
@@ -157,7 +158,7 @@
     .nav-links a:hover {
       color: var(--color-caramel);
     }
-    /* ---------- HERO: GRADIENTE GLOW + IMAGEM ELEGANTE ---------- */
+    /* ---------- HERO: VÍDEO CINEMATOGRÁFICO + PARALLAX ---------- */
     .hero {
       position: relative;
       height: 90vh;
@@ -166,10 +167,58 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      background: radial-gradient(ellipse at 75% 40%, #fff3e4 0%, #fae1d0 45%, #dbb88c 100%);
       overflow: hidden;
+      background-color: #2c3e2f; /* fallback */
     }
-    /* Camada de ruído sutil (textura) */
+    /* Vídeo responsivo, cobre tudo, com parallax via transform */
+    .hero-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+      transition: transform 0.1s var(--transition-shopify); /* suave, mas atualizado via JS */
+      z-index: 1;
+    }
+    /* Overlay escuro sutil + gradiente para legibilidade */
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 70% 40%, rgba(44,62,47,0.2) 0%, rgba(30,20,10,0.45) 100%);
+      z-index: 2;
+    }
+    /* Bolhas de luz (glow) por cima do vídeo */
+    .hero-glow-1 {
+      position: absolute;
+      top: -15%;
+      left: -5%;
+      width: 70%;
+      height: 90%;
+      background: radial-gradient(circle, rgba(255,245,235,0.5) 0%, rgba(255,245,235,0) 80%);
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: 3;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      bottom: -25%;
+      right: -5%;
+      width: 80%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(215,170,130,0.35) 0%, rgba(215,170,130,0) 80%);
+      border-radius: 50%;
+      filter: blur(110px);
+      z-index: 3;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
     .hero-noise {
       position: absolute;
       top: 0;
@@ -180,78 +229,45 @@
       background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
       mix-blend-mode: multiply;
       pointer-events: none;
-    }
-    /* Bolhas de luz abstratas (glow característico) */
-    .hero-glow-1 {
-      position: absolute;
-      top: -15%;
-      left: -5%;
-      width: 70%;
-      height: 90%;
-      background: radial-gradient(circle, rgba(255,245,235,0.6) 0%, rgba(255,245,235,0) 75%);
-      border-radius: 50%;
-      filter: blur(90px);
-      pointer-events: none;
-    }
-    .hero-glow-2 {
-      position: absolute;
-      bottom: -25%;
-      right: -5%;
-      width: 80%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(215,170,130,0.4) 0%, rgba(215,170,130,0) 75%);
-      border-radius: 50%;
-      filter: blur(110px);
-      pointer-events: none;
-    }
-    /* Imagem de fundo elegante (aberta, arejada) com saturação controlada */
-    .hero-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.26;
-      mix-blend-mode: overlay;
-      filter: saturate(1.12) contrast(1.03) brightness(1.02);
+      z-index: 4;
     }
     .hero-content {
       position: relative;
-      z-index: 30;
+      z-index: 10;
       max-width: 950px;
       padding: 2rem 1.5rem;
+      color: white;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.3);
     }
     .hero-badge {
       font-size: 0.8rem;
       letter-spacing: 5px;
       text-transform: uppercase;
-      color: var(--color-mocha);
-      background: rgba(255, 249, 239, 0.55);
-      backdrop-filter: blur(6px);
+      color: #fef7e9;
+      background: rgba(44,62,47,0.3);
+      backdrop-filter: blur(8px);
       padding: 0.6rem 1.8rem;
       border-radius: 50px;
       display: inline-block;
       margin-bottom: 1.8rem;
-      border: 0.5px solid rgba(120, 90, 70, 0.15);
+      border: 0.5px solid rgba(255,255,240,0.3);
       font-weight: 500;
     }
     .hero h1 {
       font-size: clamp(3.8rem, 12vw, 6.4rem);
       font-weight: 800;
       line-height: 1;
-      color: #2c3e2f;
+      color: white;
       margin-bottom: 1rem;
-      text-shadow: 0 4px 25px rgba(255, 245, 235, 0.6);
+      text-shadow: 0 4px 30px rgba(0,0,0,0.3);
       letter-spacing: -0.02em;
     }
     .hero p {
       font-size: 1.5rem;
       font-weight: 320;
-      color: #4e3b2b;
+      color: rgba(255,255,245,0.95);
       max-width: 620px;
       margin: 0 auto 2.5rem;
-      opacity: 0.9;
       line-height: 1.4;
     }
     /* ---------- STORY SECTION ---------- */
@@ -286,7 +302,7 @@
     .story-image:hover img {
       transform: scale(1.04);
     }
-    /* ---------- MENU CARDS (com borda sutil e elevação) ---------- */
+    /* ---------- MENU CARDS ---------- */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
@@ -348,7 +364,7 @@
       font-weight: 400;
       color: #9b9b9b;
     }
-    /* ---------- INFO GRID (LOCAL/HORÁRIOS) ---------- */
+    /* ---------- INFO GRID ---------- */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -474,6 +490,10 @@
       .hero p {
         font-size: 1.3rem;
       }
+      /* Desativar parallax intenso no mobile para performance */
+      .hero-video {
+        transform: none !important;
+      }
     }
     @media screen and (max-width: 480px) {
       .hero {
@@ -491,7 +511,7 @@
         align-items: center;
       }
     }
-    /* ---------- ANIMAÇÕES AOS COM EASING SHOPIFY ---------- */
+    /* ---------- ANIMAÇÕES AOS ---------- */
     [data-aos] {
       transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
       transition-duration: 0.8s !important;
@@ -518,15 +538,19 @@
     </div>
   </nav>
 
-  <!-- HERO – ESTÉTICA SHOPIFY EDITIONS (sem vídeo, com gradiente glow + imagem elegante) -->
+  <!-- HERO COM VÍDEO DE CAFÉ SENDO PASSADO + VAPOR + PARALLAX -->
   <section id="home" class="hero">
-    <!-- Camadas de glow (assinatura Shopify) -->
+    <!-- Vídeo: café sendo passado com vapor subindo (Coverr) -->
+    <video class="hero-video" autoplay muted loop playsinline poster="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+      <source src="https://cdn.coverr.co/videos/coverr-pouring-coffee-1645/1080p.mp4" type="video/mp4">
+      <!-- Fallback: imagem estática elegante -->
+    </video>
+    <!-- Overlay para contraste e profundidade -->
+    <div class="hero-overlay"></div>
+    <!-- Glow assinatura Shopify -->
     <div class="hero-glow-1"></div>
     <div class="hero-glow-2"></div>
-    <!-- Ruído sutil -->
     <div class="hero-noise"></div>
-    <!-- Imagem de fundo elegante e aberta (alta resolução, saturação controlada) -->
-    <img class="hero-image" src="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Xícara de café com vapor em mesa clara e arejada" loading="eager">
     
     <div class="hero-content" data-aos="fade-up" data-aos-duration="900">
       <span class="hero-badge">✨ Winter '26 — Paris Édition</span>
@@ -651,7 +675,7 @@
         </div>
       </div>
       <div class="copyright" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; font-size: 0.95rem; opacity: 0.8;">
-        <p>© 2026 Café Belle Vue ●  Edição Inverno ● Todos os sabores reservados. Inspirado em Paris, feito no Brasil. </p>
+        <p>© 2026 Café Belle Vue — Édition Winter '26. Inspirado em Paris, feito no Brasil.</p>
       </div>
     </div>
   </footer>
@@ -692,9 +716,57 @@
         hamburger.classList.remove('active');
       }
     });
+
+    // ---------- PARALLAX NO VÍDEO (scroll responsivo e suave) ----------
+    const heroVideo = document.querySelector('.hero-video');
+    const heroSection = document.querySelector('.hero');
+    
+    if (heroVideo && heroSection) {
+      let ticking = false;
+      
+      function updateParallax() {
+        // Só aplica em telas > 768px (mobile desativado)
+        if (window.innerWidth <= 768) return;
+        
+        const scrollY = window.scrollY;
+        const heroTop = heroSection.offsetTop;
+        const heroHeight = heroSection.offsetHeight;
+        const scrollRelative = Math.max(0, scrollY - heroTop);
+        const maxScroll = heroHeight * 0.6; // efeito suave até 60% da altura
+        
+        // Quanto mais rola, mais o vídeo sobe e escala levemente
+        const translateY = Math.min(scrollRelative * 0.25, maxScroll * 0.25);
+        const scale = 1 + (scrollRelative * 0.0005); // zoom sutil
+        
+        heroVideo.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        
+        ticking = false;
+      }
+      
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      });
+      
+      // Executa uma vez no carregamento
+      updateParallax();
+    }
+
+    // Fallback: se o vídeo não carregar, exibe a imagem do poster
+    const video = document.querySelector('.hero-video');
+    if (video) {
+      video.addEventListener('error', function() {
+        // Vídeo falhou, podemos esconder e mostrar uma imagem estática
+        // Mas já temos o poster, então o próprio vídeo mostra o poster se falhar
+        // Para garantir, podemos forçar a exibição do poster
+        this.style.background = 'url(https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2) center/cover no-repeat';
+      });
+    }
   </script>
   <noscript>
-    <style>.hero-image { opacity: 0.4; }</style>
+    <style>.hero-video { display: none; } .hero { background: url('https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat; }</style>
   </noscript>
 </body>
 </html>
