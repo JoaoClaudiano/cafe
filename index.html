@@ -3,25 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Café Belle Vue — Paris em cada xícara</title>
-  <!-- Google Fonts & AOS -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Café Belle Vue — Édition Winter '26</title>
+  <!-- Google Fonts: Inter + Playfair Display -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <!-- AOS CSS -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* VARIÁVEIS & RESET */
+    /* ---------- VARIÁVEIS & RESET (Estética Shopify Editions) ---------- */
     :root {
-      --color-cream: #faf7f2;
-      --color-warm: #f3ede5;
-      --color-brown: #4e3b2b;
-      --color-gold: #b78c5a;
+      --color-deep-espresso: #2c3e2f;    /* verde musgo elegante, como o fundo da Shopify */
+      --color-cream: #fff9ef;            /* base creme clara */
+      --color-warm-latte: #fae9d8;       /* fundo suave para seções */
+      --color-caramel: #b78c5a;          /* dourado assinatura */
+      --color-mocha: #7a5a44;           /* para textos secundários */
       --color-soft-black: #2c2c2c;
       --color-white: #ffffff;
-      --shadow-sm: 0 8px 20px rgba(0,0,0,0.04), 0 2px 6px rgba(0,0,0,0.02);
-      --shadow-hover: 0 18px 30px rgba(0,0,0,0.06);
-      --transition: all 0.3s ease;
-      --radius: 20px;
+      --shadow-sm: 0 8px 30px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.02);
+      --shadow-hover: 0 20px 40px rgba(44,62,47,0.08), 0 8px 20px rgba(0,0,0,0.02);
+      --transition-shopify: cubic-bezier(0.2, 0, 0, 1);
+      --radius-md: 24px;
+      --radius-sm: 20px;
     }
     * {
       margin: 0;
@@ -35,12 +38,13 @@
       font-family: 'Inter', sans-serif;
       background-color: var(--color-cream);
       color: var(--color-soft-black);
-      line-height: 1.6;
+      line-height: 1.5;
+      font-weight: 350;
     }
     h1, h2, h3, h4 {
       font-family: 'Playfair Display', serif;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
     a {
       text-decoration: none;
@@ -53,41 +57,70 @@
     }
     .container {
       width: 90%;
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
     }
-    /* BOTÃO PRIMÁRIO */
+    /* ---------- EASING GLOBAL (curva Shopify) ---------- */
+    * {
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+    /* ---------- TIPOGRAFIA COM ESPAÇAMENTO GENEROSO ---------- */
+    .section-title {
+      font-size: 3.2rem;
+      color: var(--color-deep-espresso);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2.4rem;
+      }
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100px;
+      height: 4px;
+      background-color: var(--color-caramel);
+      border-radius: 4px;
+    }
+    /* ---------- BOTÃO COM NUDGE (microinteração) ---------- */
     .btn {
       display: inline-block;
-      background-color: var(--color-brown);
-      color: white;
-      padding: 12px 32px;
-      border-radius: 40px;
+      background-color: var(--color-deep-espresso);
+      color: var(--color-cream);
+      padding: 1rem 2.8rem;
+      border-radius: 50px;
       font-weight: 500;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: 0 4px 12px rgba(78, 59, 43, 0.2);
+      font-size: 1.05rem;
       border: 1px solid transparent;
+      transition: all 0.35s var(--transition-shopify);
+      box-shadow: 0 10px 25px -8px rgba(44,62,47,0.25);
+      letter-spacing: 0.3px;
     }
     .btn:hover {
       background-color: transparent;
-      color: var(--color-brown);
-      border-color: var(--color-brown);
-      box-shadow: none;
+      color: var(--color-deep-espresso);
+      border-color: var(--color-deep-espresso);
+      transform: scale(1.02) translateY(-3px);
+      box-shadow: 0 20px 35px -12px rgba(44,62,47,0.2);
     }
-    /* NAVBAR */
+    /* ---------- NAVBAR (translúcida com blur) ---------- */
     .navbar {
       position: sticky;
       top: 0;
       width: 100%;
-      background-color: rgba(250, 247, 242, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background-color: rgba(255, 249, 239, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 1000;
       padding: 1rem 0;
-      border-bottom: 1px solid rgba(78, 59, 43, 0.05);
+      border-bottom: 1px solid rgba(44,62,47,0.05);
     }
     .nav-container {
       display: flex;
@@ -98,198 +131,216 @@
     }
     .logo {
       font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: var(--color-brown);
-      letter-spacing: -0.5px;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--color-deep-espresso);
+      letter-spacing: -1px;
+      line-height: 1;
     }
     .logo span {
-      color: var(--color-gold);
-      font-size: 1rem;
-      margin-left: 4px;
+      color: var(--color-caramel);
+      font-size: 1.2rem;
+      margin-left: 2px;
     }
     .nav-links {
       display: flex;
       list-style: none;
-      gap: 2rem;
-      font-weight: 500;
+      gap: 2.5rem;
+      font-weight: 450;
     }
     .nav-links a {
-      color: var(--color-brown);
-      transition: color 0.2s;
+      color: var(--color-deep-espresso);
+      transition: color 0.2s var(--transition-shopify);
       font-size: 1.05rem;
+      letter-spacing: 0.3px;
     }
     .nav-links a:hover {
-      color: var(--color-gold);
+      color: var(--color-caramel);
     }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 6px;
-    }
-    .hamburger span {
-      width: 28px;
-      height: 2px;
-      background-color: var(--color-brown);
-      border-radius: 4px;
-      transition: var(--transition);
-    }
-    /* HERO — AGORA COM VÍDEO DE FUNDO ELEGANTE */
+    /* ---------- HERO: GRADIENTE GLOW + IMAGEM ELEGANTE ---------- */
     .hero {
       position: relative;
       height: 90vh;
-      min-height: 600px;
+      min-height: 650px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: white;
+      background: radial-gradient(ellipse at 75% 40%, #fff3e4 0%, #fae1d0 45%, #dbb88c 100%);
       overflow: hidden;
     }
-    .hero-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translateX(-50%) translateY(-50%);
-      object-fit: cover;
-      z-index: 1;
-    }
-    .hero-overlay {
+    /* Camada de ruído sutil (textura) */
+    .hero-noise {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(30, 20, 10, 0.35); /* elegante e suave */
-      z-index: 2;
+      opacity: 0.035;
+      background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
+      mix-blend-mode: multiply;
+      pointer-events: none;
+    }
+    /* Bolhas de luz abstratas (glow característico) */
+    .hero-glow-1 {
+      position: absolute;
+      top: -15%;
+      left: -5%;
+      width: 70%;
+      height: 90%;
+      background: radial-gradient(circle, rgba(255,245,235,0.6) 0%, rgba(255,245,235,0) 75%);
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      bottom: -25%;
+      right: -5%;
+      width: 80%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(215,170,130,0.4) 0%, rgba(215,170,130,0) 75%);
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+    }
+    /* Imagem de fundo elegante (aberta, arejada) com saturação controlada */
+    .hero-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.26;
+      mix-blend-mode: overlay;
+      filter: saturate(1.12) contrast(1.03) brightness(1.02);
     }
     .hero-content {
       position: relative;
-      z-index: 3;
-      max-width: 800px;
-      padding: 1.5rem;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      z-index: 30;
+      max-width: 950px;
+      padding: 2rem 1.5rem;
+    }
+    .hero-badge {
+      font-size: 0.8rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--color-mocha);
+      background: rgba(255, 249, 239, 0.55);
+      backdrop-filter: blur(6px);
+      padding: 0.6rem 1.8rem;
+      border-radius: 50px;
+      display: inline-block;
+      margin-bottom: 1.8rem;
+      border: 0.5px solid rgba(120, 90, 70, 0.15);
+      font-weight: 500;
     }
     .hero h1 {
-      font-size: clamp(2.8rem, 10vw, 4.8rem);
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-      line-height: 1.1;
+      font-size: clamp(3.8rem, 12vw, 6.4rem);
+      font-weight: 800;
+      line-height: 1;
+      color: #2c3e2f;
+      margin-bottom: 1rem;
+      text-shadow: 0 4px 25px rgba(255, 245, 235, 0.6);
+      letter-spacing: -0.02em;
     }
     .hero p {
-      font-size: clamp(1.2rem, 5vw, 1.6rem);
-      font-weight: 300;
-      margin-bottom: 2rem;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 1.5rem;
+      font-weight: 320;
+      color: #4e3b2b;
+      max-width: 620px;
+      margin: 0 auto 2.5rem;
+      opacity: 0.9;
+      line-height: 1.4;
     }
-    /* SEÇÕES */
-    section {
-      padding: 5rem 0;
-    }
-    .section-title {
-      font-size: 2.6rem;
-      color: var(--color-brown);
-      margin-bottom: 1rem;
-      position: relative;
-      display: inline-block;
-    }
-    .section-title:after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 80px;
-      height: 3px;
-      background-color: var(--color-gold);
-      border-radius: 2px;
-    }
+    /* ---------- STORY SECTION ---------- */
     .story-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      gap: 4rem;
       align-items: center;
+      margin-top: 2rem;
     }
     .story-text p {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: #4a4a4a;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.8rem;
       line-height: 1.8;
+      font-weight: 350;
     }
     .story-image {
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      transition: all 0.6s var(--transition-shopify);
       aspect-ratio: 4/5;
     }
     .story-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s ease;
+      transition: transform 0.9s var(--transition-shopify);
+      filter: saturate(1.08) contrast(1.02);
     }
     .story-image:hover img {
-      transform: scale(1.03);
+      transform: scale(1.04);
     }
-    /* MENU CARDS */
+    /* ---------- MENU CARDS (com borda sutil e elevação) ---------- */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 2.2rem;
       margin-top: 3rem;
     }
     .menu-card {
       background: white;
-      border-radius: var(--radius);
+      border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow-sm);
-      transition: var(--transition);
+      transition: all 0.4s var(--transition-shopify);
       display: flex;
       flex-direction: column;
+      border: 0.5px solid rgba(0,0,0,0.02);
     }
     .menu-card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-12px);
       box-shadow: var(--shadow-hover);
     }
     .card-img {
-      height: 220px;
+      height: 240px;
       overflow: hidden;
     }
     .card-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s;
+      transition: transform 0.8s var(--transition-shopify);
+      filter: saturate(1.1);
     }
     .menu-card:hover .card-img img {
       transform: scale(1.05);
     }
     .card-content {
-      padding: 1.5rem 1.5rem 1.8rem;
+      padding: 1.8rem 1.8rem 2.2rem;
       flex: 1;
-      display: flex;
-      flex-direction: column;
     }
     .card-content h3 {
-      font-size: 1.6rem;
-      color: var(--color-brown);
+      font-size: 1.8rem;
+      color: var(--color-deep-espresso);
       margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
     }
     .card-content p {
       color: #5a5a5a;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
       flex: 1;
+      font-weight: 350;
     }
     .price {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 700;
-      color: var(--color-gold);
+      color: var(--color-caramel);
       font-family: 'Playfair Display', serif;
     }
     .price small {
@@ -297,117 +348,73 @@
       font-weight: 400;
       color: #9b9b9b;
     }
-    /* LOCAL E HORÁRIOS */
+    /* ---------- INFO GRID (LOCAL/HORÁRIOS) ---------- */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
       background: white;
-      border-radius: var(--radius);
-      padding: 2.5rem;
+      border-radius: var(--radius-md);
+      padding: 2.8rem;
       box-shadow: var(--shadow-sm);
       margin-top: 2rem;
+      border: 0.5px solid rgba(0,0,0,0.02);
     }
     .info-item {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.8rem;
       align-items: flex-start;
     }
     .info-item i {
       font-size: 2rem;
-      color: var(--color-gold);
-      background: rgba(183, 140, 90, 0.1);
-      padding: 1rem;
+      color: var(--color-caramel);
+      background: rgba(183, 140, 90, 0.08);
+      padding: 1.1rem;
       border-radius: 50%;
     }
     .info-text h4 {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-bottom: 0.8rem;
-      color: var(--color-brown);
-    }
-    .info-text p {
-      margin-bottom: 0.4rem;
-      color: #4d4d4d;
-    }
-    .hours {
-      list-style: none;
+      color: var(--color-deep-espresso);
     }
     .hours li {
       display: flex;
       justify-content: space-between;
-      padding: 0.4rem 0;
+      padding: 0.5rem 0;
       border-bottom: 1px dashed #e4dcd2;
+      font-weight: 350;
     }
-    /* FOOTER */
+    /* ---------- FOOTER ---------- */
     footer {
-      background-color: var(--color-brown);
-      color: #e8e0d5;
-      padding: 3rem 0 1.5rem;
-      margin-top: 2rem;
-    }
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 2rem;
+      background-color: var(--color-deep-espresso);
+      color: #f0ebe4;
+      padding: 4rem 0 2rem;
+      margin-top: 3rem;
     }
     .footer-logo {
       font-family: 'Playfair Display', serif;
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.2rem;
+      font-weight: 800;
       color: white;
-    }
-    .social {
-      display: flex;
-      gap: 1.2rem;
     }
     .social a {
       color: white;
-      background: rgba(255,255,255,0.1);
-      width: 44px;
-      height: 44px;
+      background: rgba(255,255,255,0.08);
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: var(--transition);
-      font-size: 1.3rem;
-    }
-    .hero-image {
-      width: 100%;
-      height: 90vh;
-      object-fit: cover;
-      filter: saturate(1.1) contrast(1.05) brightness(1.02);
-      mix-blend-mode: multiply; /* ou overlay, dependendo do fundo */
+      transition: all 0.3s var(--transition-shopify);
+      font-size: 1.4rem;
     }
     .social a:hover {
-      background: var(--color-gold);
-      color: var(--color-brown);
-      transform: translateY(-5px);
+      background: var(--color-caramel);
+      color: var(--color-deep-espresso);
+      transform: translateY(-6px);
     }
-    .copyright {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 1.8rem;
-      font-size: 0.95rem;
-    }
-    * {
-      transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
-    }
-    
-    [data-aos] {
-      transition-duration: 0.8s !important;
-      transition-property: transform, opacity, filter !important;
-    }
-    
-    /* Efeito "nudge" em botões */
-    .btn:hover {
-      transform: scale(1.02) translateY(-2px);
-      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.15);
-    }
-    /* MOBILE STYLES */
+    /* ---------- MOBILE FIRST ---------- */
     @media screen and (max-width: 768px) {
       .nav-links {
         position: fixed;
@@ -415,15 +422,15 @@
         left: -100%;
         width: 80%;
         height: 100vh;
-        background: rgba(250, 247, 242, 0.98);
-        backdrop-filter: blur(10px);
+        background: rgba(255, 249, 239, 0.98);
+        backdrop-filter: blur(12px);
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         padding-top: 3rem;
         gap: 2rem;
-        transition: left 0.3s ease-in-out;
-        box-shadow: 5px 0 20px rgba(0,0,0,0.03);
+        transition: left 0.4s var(--transition-shopify);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.02);
         z-index: 999;
       }
       .nav-links.active {
@@ -431,15 +438,25 @@
       }
       .hamburger {
         display: flex;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 30px;
+        height: 2px;
+        background-color: var(--color-deep-espresso);
+        border-radius: 3px;
+        transition: 0.3s var(--transition-shopify);
       }
       .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
+        transform: rotate(45deg) translate(7px, 7px);
       }
       .hamburger.active span:nth-child(2) {
         opacity: 0;
       }
       .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
+        transform: rotate(-45deg) translate(7px, -7px);
       }
       .story-grid, .info-grid {
         grid-template-columns: 1fr;
@@ -449,28 +466,24 @@
         order: -1;
       }
       .info-grid {
-        padding: 1.8rem;
-      }
-      .footer-content {
-        flex-direction: column;
-        text-align: center;
+        padding: 2rem;
       }
       .hero h1 {
-        font-size: 3rem;
+        font-size: 3.2rem;
       }
-      .section-title {
-        font-size: 2rem;
+      .hero p {
+        font-size: 1.3rem;
       }
     }
     @media screen and (max-width: 480px) {
       .hero {
-        min-height: 500px;
+        min-height: 550px;
       }
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
       }
       .btn {
-        padding: 10px 24px;
+        padding: 0.9rem 2rem;
       }
       .info-item {
         flex-direction: column;
@@ -478,39 +491,11 @@
         align-items: center;
       }
     }
-    /* fallback para browsers que não suportam vídeo */
-    .hero-fallback {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://images.unsplash.com/photo-1485809052957-5114be92b2a9?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
-      z-index: 0;
-    }
-    /* AOS custom */
+    /* ---------- ANIMAÇÕES AOS COM EASING SHOPIFY ---------- */
     [data-aos] {
-      transition-timing-function: ease-out;
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
+      transition-duration: 0.8s !important;
     }
-    <section id="home" class="hero" style="
-      background: radial-gradient(ellipse at 80% 40%, #fff7e6 0%, #fae9d8 40%, #dbb88c 100%);
-      position: relative;
-      overflow: hidden;
-      <div style="position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0.03; background-image: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>'); mix-blend-mode: multiply;"></div>
-      
-      <!-- Bolhas de luz abstratas (como no site da Shopify) -->
-      <div style="position: absolute; top: -10%; left: -5%; width: 60%; height: 80%; background: radial-gradient(circle, rgba(255,235,215,0.5) 0%, rgba(255,235,215,0) 70%); border-radius: 50%; filter: blur(80px);"></div>
-      <div style="position: absolute; bottom: -20%; right: -5%; width: 70%; height: 90%; background: radial-gradient(circle, rgba(215,170,130,0.35) 0%, rgba(215,170,130,0) 70%); border-radius: 50%; filter: blur(100px);"></div>
-      
-      <div class="hero-content" style="position: relative; z-index: 10; text-align: center; max-width: 900px; margin: 0 auto; padding: 8rem 1.5rem;">
-        <span style="font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; color: #7a5a44; background: rgba(255,255,240,0.5); backdrop-filter: blur(4px); padding: 0.5rem 1.2rem; border-radius: 40px; display: inline-block; margin-bottom: 1.5rem;">✨ Winter '26 — Paris Édition</span>
-        <h1 style="font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 700; line-height: 1; color: #3a2c1f; margin-bottom: 1.2rem; text-shadow: 0 4px 20px rgba(255,255,240,0.4);">Paris em<br>cada gole</h1>
-        <p style="font-size: 1.4rem; font-weight: 320; color: #4e3b2b; max-width: 600px; margin: 0 auto 2.5rem; opacity: 0.9;">Café especial · Croissants · Arte & aconchego</p>
-        <a href="#cardapio" class="btn" style="background: #2c3e2f; color: #fff9ef; border: none; padding: 1rem 3rem; font-size: 1.1rem; border-radius: 50px; box-shadow: 0 10px 25px -8px rgba(44,62,47,0.3); transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);">Descobrir o menu →</a>
-      </div>
-    </section>
-
-    
   </style>
 </head>
 <body>
@@ -533,45 +518,45 @@
     </div>
   </nav>
 
-  <!-- HERO COM VÍDEO CINEMATOGRÁFICO (CAFÉ SENDO PASSADO, VAPOR SUBINDO) -->
+  <!-- HERO – ESTÉTICA SHOPIFY EDITIONS (sem vídeo, com gradiente glow + imagem elegante) -->
   <section id="home" class="hero">
-    <!-- Vídeo de fundo: coffee pour com vapor, elegante e aberto -->
-    <video class="hero-video" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1485809052957-5114be92b2a9?q=80&w=2070&auto=format&fit=crop">
-      <source src="https://cdn.coverr.co/videos/coverr-pouring-coffee-1645/1080p.mp4" type="video/mp4">
-      <!-- Fallback: imagem estática elegante e aberta (café e croissant em mesa clara) -->
-    </video>
-    <!-- Overlay suave para legibilidade -->
-    <div class="hero-overlay"></div>
-    <!-- Fallback apenas se o vídeo não carregar -->
-    <div class="hero-fallback" style="display: none;"></div>
-    <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
-      <h1>Paris em cada gole</h1>
+    <!-- Camadas de glow (assinatura Shopify) -->
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <!-- Ruído sutil -->
+    <div class="hero-noise"></div>
+    <!-- Imagem de fundo elegante e aberta (alta resolução, saturação controlada) -->
+    <img class="hero-image" src="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Xícara de café com vapor em mesa clara e arejada" loading="eager">
+    
+    <div class="hero-content" data-aos="fade-up" data-aos-duration="900">
+      <span class="hero-badge">✨ Winter '26 — Paris Édition</span>
+      <h1>Paris em<br>cada gole</h1>
       <p>Café especial · Croissants · Arte & aconchego</p>
-      <a href="#cardapio" class="btn">Descobrir o menu</a>
+      <a href="#cardapio" class="btn">Descobrir o menu →</a>
     </div>
   </section>
 
   <!-- HISTÓRIA / STORYTELLING -->
-  <section id="historia" class="container">
+  <section id="historia" class="container" style="padding-top: 6rem; padding-bottom: 6rem;">
     <h2 class="section-title" data-aos="fade-right">Nossa história</h2>
     <div class="story-grid">
       <div class="story-text" data-aos="fade-right" data-aos-delay="100">
         <p>Em uma pequena travessa do 6º arrondissement, nasceu o sonho de trazer a cadência parisiense para o coração do Brasil. <strong>Café Belle Vue</strong> é uma homenagem aos bistrôs escondidos, onde o tempo desacelera e o aroma do café recém-torrado conta histórias.</p>
         <p>Nossos grãos são cultivados nas montanhas da Borgonha e torrados artesanalmente. Cada xícara é um convite: desacelere, sinta o momento. Aqui, a pressa fica do lado de fora.</p>
-        <p><em>— "O verdadeiro luxo é o tempo bem gasto."</em></p>
-        <a href="#cardapio" style="color: var(--color-gold); font-weight: 600; margin-top: 1rem; display: inline-block;">Conheça nossos blends →</a>
+        <p style="font-size: 1.3rem; font-family: 'Playfair Display'; color: #7a5a44;">— "O verdadeiro luxo é o tempo bem gasto."</p>
+        <a href="#cardapio" style="color: var(--color-caramel); font-weight: 600; margin-top: 1.5rem; display: inline-block; border-bottom: 2px solid transparent; transition: border 0.2s;">Conheça nossos blends →</a>
       </div>
-      <div class="story-image" data-aos="fade-left" data-aos-delay="200">
+      <div class="story-image" data-aos="fade-left" data-aos-delay="150">
         <img src="https://images.unsplash.com/photo-1554115331131-375e3b3e54b1?q=80&w=1974&auto=format&fit=crop" alt="Interior do Café Belle Vue, bancada de madeira e xícaras" loading="lazy">
       </div>
     </div>
   </section>
 
   <!-- CARDÁPIO DESTAQUE -->
-  <section id="cardapio" style="background: var(--color-warm);">
+  <section id="cardapio" style="background: var(--color-warm-latte); padding: 6rem 0;">
     <div class="container">
       <h2 class="section-title" data-aos="fade-right">Sabores de Paris</h2>
-      <p style="font-size: 1.2rem; margin-bottom: 1rem; color: #4e3b2b;">Clássicos franceses com um toque contemporâneo</p>
+      <p style="font-size: 1.3rem; margin-bottom: 2rem; color: #4e3b2b; font-weight: 350; max-width: 700px;">Clássicos franceses com um toque contemporâneo</p>
       <div class="menu-grid">
         <!-- ITEM 1 -->
         <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="50">
@@ -585,7 +570,7 @@
           </div>
         </div>
         <!-- ITEM 2 -->
-        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="150">
+        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="100">
           <div class="card-img">
             <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1926&auto=format&fit=crop" alt="Croissant folhado e dourado" loading="lazy">
           </div>
@@ -596,7 +581,7 @@
           </div>
         </div>
         <!-- ITEM 3 -->
-        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="250">
+        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="150">
           <div class="card-img">
             <img src="https://images.unsplash.com/photo-1488477304112-4944851de03d?q=80&w=1974&auto=format&fit=crop" alt="Tartelette de limão siciliano" loading="lazy">
           </div>
@@ -611,7 +596,7 @@
   </section>
 
   <!-- LOCALIZAÇÃO E HORÁRIOS -->
-  <section id="localizacao" class="container">
+  <section id="localizacao" class="container" style="padding: 6rem 0;">
     <h2 class="section-title" data-aos="fade-right">Encontre seu refúgio</h2>
     <div class="info-grid" data-aos="flip-up" data-aos-duration="800">
       <div class="info-item">
@@ -620,27 +605,27 @@
           <h4>Endereço</h4>
           <p>Rua Augusta, 520 – Consolação</p>
           <p>São Paulo / SP — 01305-000</p>
-          <p style="margin-top: 0.8rem;"><i class="fas fa-train" style="margin-right: 8px; color: var(--color-gold);"></i> Metrô Augusta (200m)</p>
+          <p style="margin-top: 0.8rem;"><i class="fas fa-train" style="margin-right: 8px; color: var(--color-caramel);"></i> Metrô Augusta (200m)</p>
         </div>
       </div>
       <div class="info-item">
         <i class="fas fa-clock"></i>
         <div class="info-text">
-          <h4>Horário de funcionamento</h4>
+          <h4>Horário</h4>
           <ul class="hours">
             <li><span>Segunda–Sexta</span> <span>08:00 – 20:00</span></li>
             <li><span>Sábado</span> <span>09:00 – 18:00</span></li>
             <li><span>Domingo</span> <span>10:00 – 16:00</span></li>
           </ul>
-          <p style="margin-top: 1rem; font-style: italic;">*Happy hour todo dia 17h–19h: 20% off em bebidas</p>
+          <p style="margin-top: 1rem; font-style: italic; opacity: 0.8;">*Happy hour 17h–19h: 20% off</p>
         </div>
       </div>
     </div>
-    <!-- miniatura de mapa elegante -->
-    <div style="margin-top: 2rem; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); height: 240px; background: #d9d2c5; display: flex; align-items: center; justify-content: center;" data-aos="fade-up">
-      <div style="text-align: center; color: #4e3b2b;">
-        <i class="fas fa-map" style="font-size: 3rem; opacity: 0.6; margin-bottom: 0.5rem;"></i>
-        <p style="font-weight: 500;">Rua Augusta, 520 – aberto todos os dias<br><span style="font-size: 0.9rem;">(mapa interativo disponível em breve)</span></p>
+    <!-- Mapa conceitual elegante -->
+    <div style="margin-top: 2.5rem; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); height: 240px; background: linear-gradient(145deg, #e2d8cd, #d2c6b8); display: flex; align-items: center; justify-content: center;" data-aos="fade-up">
+      <div style="text-align: center; color: #3a2c1f;">
+        <i class="fas fa-map" style="font-size: 3rem; opacity: 0.5; margin-bottom: 0.7rem;"></i>
+        <p style="font-weight: 500; font-size: 1.1rem;">Rua Augusta, 520 – aberto todos os dias<br><span style="font-size: 0.95rem; opacity: 0.8;">(mapa interativo disponível em breve)</span></p>
       </div>
     </div>
   </section>
@@ -648,25 +633,25 @@
   <!-- FOOTER / CONTATO -->
   <footer id="contato">
     <div class="container">
-      <div class="footer-content">
+      <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2.5rem; margin-bottom: 2.5rem;">
         <div>
           <span class="footer-logo">Belle Vue</span>
-          <p style="margin-top: 0.8rem; max-width: 300px;">Café de especialidade e doçaria francesa. Um pedaço de Paris que cabe na sua xícara.</p>
+          <p style="margin-top: 1rem; max-width: 320px; opacity: 0.85; font-weight: 300;">Café de especialidade e doçaria francesa. Um pedaço de Paris que cabe na sua xícara.</p>
         </div>
         <div>
-          <h4 style="color: white; margin-bottom: 1rem;">Conecte-se</h4>
-          <div class="social">
+          <h4 style="color: white; margin-bottom: 1.2rem; font-size: 1.5rem;">Conecte-se</h4>
+          <div class="social" style="display: flex; gap: 1.2rem;">
             <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
             <a href="#" aria-label="E-mail"><i class="fas fa-envelope"></i></a>
           </div>
-          <p style="margin-top: 1.5rem;"><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> (11) 98765-4321</p>
+          <p style="margin-top: 1.8rem;"><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> (11) 98765-4321</p>
           <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> bonjour@bellevuecafe.com.br</p>
         </div>
       </div>
-      <div class="copyright">
-        <p>© 2026 Café Belle Vue — inspirado em Paris, feito no Brasil. Todos os sabores reservados.</p>
+      <div class="copyright" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; font-size: 0.95rem; opacity: 0.8;">
+        <p>© 2026 Café Belle Vue ●  Edição Inverno ● Todos os sabores reservados. Inspirado em Paris, feito no Brasil. </p>
       </div>
     </div>
   </footer>
@@ -674,12 +659,13 @@
   <!-- SCRIPTS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Inicializa animações AOS
+    // Inicializa AOS com easing Shopify
     AOS.init({
-      duration: 800,
+      duration: 850,
       once: true,
-      offset: 50,
-      disable: 'mobile'
+      offset: 40,
+      disable: 'mobile',
+      easing: 'cubic-bezier(0.2, 0, 0, 1)'
     });
 
     // Menu mobile
@@ -706,20 +692,9 @@
         hamburger.classList.remove('active');
       }
     });
-
-    // Fallback sutil: se o vídeo não carregar, exibe a imagem estática
-    const heroVideo = document.querySelector('.hero-video');
-    const fallbackDiv = document.querySelector('.hero-fallback');
-    if (heroVideo) {
-      heroVideo.addEventListener('error', function() {
-        this.style.display = 'none';
-        if (fallbackDiv) fallbackDiv.style.display = 'block';
-      });
-      // Tenta garantir que o vídeo carregue; se não, fallback já cobre
-    }
   </script>
   <noscript>
-    <style>.hero-fallback { display: block !important; } .hero-video { display: none; }</style>
+    <style>.hero-image { opacity: 0.4; }</style>
   </noscript>
 </body>
 </html>
