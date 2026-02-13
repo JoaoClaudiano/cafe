@@ -18,7 +18,6 @@
       --color-warm-latte: #fae9d8;
       --color-caramel: #b78c5a;
       --color-mocha: #7a5a44;
-      --color-soft-black: #2c2c2c;
       --glass-bg: rgba(255, 249, 239, 0.75);
       --glass-card: rgba(255, 255, 255, 0.7);
       --shadow-sm: 0 8px 30px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.02);
@@ -41,8 +40,8 @@
       font-weight: 350;
       overflow-x: hidden;
       color: var(--color-soft-black);
-      /* Fallback para quando o vídeo não carrega */
-      background-color: #2c3e2f;
+      background-color: #2c3e2f; /* fallback */
+      perspective: 1200px; /* 3D continuidade espacial */
     }
     h1, h2, h3, h4 {
       font-family: 'Playfair Display', serif;
@@ -76,8 +75,9 @@
       object-fit: cover;
       z-index: -2;
       pointer-events: none;
+      will-change: transform, playbackRate; /* slow motion progressivo */
     }
-    /* Overlay escuro fixo para garantir legibilidade */
+    /* Overlay com transição de cores (dinâmico via JS) */
     .video-overlay {
       position: fixed;
       top: 0;
@@ -87,8 +87,8 @@
       background: radial-gradient(ellipse at 70% 40%, rgba(44,62,47,0.4) 0%, rgba(20,15,10,0.65) 100%);
       z-index: -1;
       pointer-events: none;
+      transition: background 0.3s var(--transition-shopify);
     }
-    /* Ruído sutil (textura) */
     .noise-overlay {
       position: fixed;
       top: 0;
@@ -134,7 +134,7 @@
       border-radius: 4px;
     }
 
-    /* ---------- BOTÃO COM NUDGE ---------- */
+    /* ---------- BOTÃO COM NUDGE E EFEITO MAGNÉTICO (BASE) ---------- */
     .btn {
       display: inline-block;
       background-color: var(--color-deep-espresso);
@@ -147,6 +147,7 @@
       transition: all 0.35s var(--transition-shopify);
       box-shadow: 0 10px 25px -8px rgba(0,0,0,0.3);
       letter-spacing: 0.3px;
+      will-change: transform;
     }
     .btn:hover {
       background-color: transparent;
@@ -214,11 +215,13 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       background: rgba(44, 62, 47, 0.15);
-      margin-bottom: 2px; /* separação sutil */
+      margin-bottom: 2px;
       border-top: 1px solid rgba(255,255,255,0.1);
       border-bottom: 1px solid rgba(255,255,255,0.1);
+      /* 3D Continuidade Espacial: rotação suave baseada no scroll (aplicada via JS) */
+      transform-style: preserve-3d;
+      transition: transform 0.1s var(--transition-shopify);
     }
-    /* A primeira seção (hero) não precisa de blur extra */
     .hero-section {
       padding-top: 0;
       padding-bottom: 0;
@@ -253,25 +256,8 @@
       border: 0.5px solid rgba(255,255,240,0.4);
       font-weight: 500;
     }
-    .hero-content h1 {
-      font-size: clamp(3.8rem, 12vw, 6.4rem);
-      font-weight: 800;
-      line-height: 1;
-      color: white;
-      margin-bottom: 1rem;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.4);
-      letter-spacing: -0.02em;
-    }
-    .hero-content p {
-      font-size: 1.5rem;
-      font-weight: 320;
-      color: rgba(255,255,245,0.95);
-      max-width: 620px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.4;
-    }
 
-    /* ---------- STORY SECTION (cards de texto com vidro) ---------- */
+    /* ---------- STORY (parallax suave e 3D) ---------- */
     .story-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -281,18 +267,11 @@
     .story-text {
       background: var(--glass-card);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       padding: 2.5rem;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
       border: 0.5px solid rgba(255,255,255,0.3);
       color: var(--color-soft-black);
-    }
-    .story-text p {
-      font-size: 1.2rem;
-      margin-bottom: 1.8rem;
-      line-height: 1.8;
-      font-weight: 350;
     }
     .story-image {
       border-radius: var(--radius-md);
@@ -301,6 +280,7 @@
       transition: all 0.6s var(--transition-shopify);
       aspect-ratio: 4/5;
       border: 0.5px solid rgba(255,255,255,0.3);
+      will-change: transform; /* parallax */
     }
     .story-image img {
       width: 100%;
@@ -312,17 +292,31 @@
       transform: scale(1.04);
     }
 
-    /* ---------- MENU CARDS (efeito vidro + opacidade + transições) ---------- */
+    /* ---------- MENU CARDS (efeito vidro) + SWIPE NO MOBILE ---------- */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
       gap: 2.2rem;
       margin-top: 3rem;
     }
+    /* Swipe no cardápio para mobile */
+    @media (max-width: 768px) {
+      .menu-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1.5rem;
+        padding-bottom: 1rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .menu-card {
+        flex: 0 0 85%;
+        scroll-snap-align: start;
+      }
+    }
     .menu-card {
       background: var(--glass-card);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow-sm);
@@ -330,6 +324,7 @@
       display: flex;
       flex-direction: column;
       border: 0.5px solid rgba(255,255,255,0.3);
+      will-change: transform;
     }
     .menu-card:hover {
       transform: translateY(-12px);
@@ -349,33 +344,6 @@
     .menu-card:hover .card-img img {
       transform: scale(1.05);
     }
-    .card-content {
-      padding: 1.8rem 1.8rem 2.2rem;
-      flex: 1;
-    }
-    .card-content h3 {
-      font-size: 1.8rem;
-      color: var(--color-deep-espresso);
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.01em;
-    }
-    .card-content p {
-      color: #3a3a3a;
-      margin-bottom: 1.5rem;
-      flex: 1;
-      font-weight: 350;
-    }
-    .price {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--color-caramel);
-      font-family: 'Playfair Display', serif;
-    }
-    .price small {
-      font-size: 1rem;
-      font-weight: 400;
-      color: #5e5e5e;
-    }
 
     /* ---------- INFO GRID (vidro) ---------- */
     .info-grid {
@@ -384,78 +352,22 @@
       gap: 3rem;
       background: var(--glass-card);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border-radius: var(--radius-md);
       padding: 2.8rem;
       box-shadow: var(--shadow-sm);
       border: 0.5px solid rgba(255,255,255,0.3);
-    }
-    .info-item {
-      display: flex;
-      gap: 1.8rem;
-      align-items: flex-start;
-    }
-    .info-item i {
-      font-size: 2rem;
-      color: var(--color-caramel);
-      background: rgba(183, 140, 90, 0.2);
-      padding: 1.1rem;
-      border-radius: 50%;
-    }
-    .info-text h4 {
-      font-size: 1.6rem;
-      margin-bottom: 0.8rem;
-      color: var(--color-deep-espresso);
-    }
-    .hours li {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-      border-bottom: 1px dashed rgba(0,0,0,0.1);
-      font-weight: 350;
     }
 
     /* ---------- FOOTER (vidro) ---------- */
     footer {
       background: rgba(44, 62, 47, 0.3);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       color: white;
       padding: 4rem 0 2rem;
       border-top: 1px solid rgba(255,255,255,0.15);
     }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: white;
-    }
-    .social a {
-      color: white;
-      background: rgba(255,255,255,0.15);
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s var(--transition-shopify);
-      font-size: 1.4rem;
-    }
-    .social a:hover {
-      background: var(--color-caramel);
-      color: var(--color-deep-espresso);
-      transform: translateY(-6px);
-    }
-    .copyright {
-      text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.15);
-      padding-top: 2rem;
-      font-size: 0.95rem;
-      opacity: 0.9;
-    }
 
-    /* ---------- MOBILE FIRST ---------- */
+    /* ---------- MOBILE FIRST (demais ajustes) ---------- */
     @media screen and (max-width: 768px) {
       .nav-links {
         position: fixed;
@@ -490,15 +402,6 @@
         border-radius: 3px;
         transition: 0.3s var(--transition-shopify);
       }
-      .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(7px, 7px);
-      }
-      .hamburger.active span:nth-child(2) {
-        opacity: 0;
-      }
-      .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-      }
       .story-grid, .info-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -506,31 +409,11 @@
       .story-image {
         order: -1;
       }
-      .hero-content h1 {
-        font-size: 3.2rem;
-      }
-      .hero-content p {
-        font-size: 1.3rem;
-      }
-      /* Desliga vídeo no mobile e usa imagem de fallback */
       .background-video {
         display: none;
       }
       .video-overlay {
         background: url('https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat fixed;
-      }
-    }
-    @media screen and (max-width: 480px) {
-      .hero-content h1 {
-        font-size: 2.8rem;
-      }
-      .btn {
-        padding: 0.9rem 2rem;
-      }
-      .info-item {
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
       }
     }
 
@@ -542,16 +425,13 @@
   </style>
 </head>
 <body>
-  <!-- VÍDEO DE FUNDO FIXO (SITE INTEIRO) -->
-  <video class="background-video" autoplay muted loop playsinline poster="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
-    <!-- Fonte confiável: vídeo de café da Pexels (use este link ou substitua pelo seu arquivo local) -->
-    <source src="assets/video/coffee.mp4" type="video/mp4">
-    <!-- Caso prefira usar um arquivo local: -->
-    <!-- <source src="assets/video/coffee.mp4" type="video/mp4"> -->
-    Seu navegador não suporta vídeo em HTML5.
+  <!-- VÍDEO DE FUNDO FIXO -->
+  <video class="background-video" id="bgVideo" autoplay muted loop playsinline poster="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2">
+    <source src="https://videos.pexels.com/video-files/3055500/3055500-uhd_2560_1440_30fps.mp4" type="video/mp4">
+    <!-- Fallback: vídeo do Coverr (caso o Pexels falhe) -->
+    <source src="https://cdn.coverr.co/videos/coverr-pouring-coffee-1645/1080p.mp4" type="video/mp4">
   </video>
-  <!-- Overlay escuro fixo -->
-  <div class="video-overlay"></div>
+  <div class="video-overlay" id="videoOverlay"></div>
   <div class="noise-overlay"></div>
 
   <!-- NAVEGAÇÃO -->
@@ -573,18 +453,18 @@
     </div>
   </nav>
 
-  <!-- HERO (sem fundo próprio, usa o vídeo do body) -->
+  <!-- HERO -->
   <section id="home" class="hero-section">
     <div class="hero-content" data-aos="fade-up" data-aos-duration="900">
       <span class="hero-badge">✨ Winter '26 — Paris Édition</span>
       <h1>Paris em<br>cada gole</h1>
       <p>Café especial · Croissants · Arte & aconchego</p>
-      <a href="#cardapio" class="btn">Descobrir o menu →</a>
+      <a href="#cardapio" class="btn magnetic-btn">Descobrir o menu →</a>
     </div>
   </section>
 
-  <!-- HISTÓRIA / STORYTELLING -->
-  <section id="historia">
+  <!-- HISTÓRIA -->
+  <section id="historia" class="parallax-section" data-section="historia">
     <div class="container">
       <h2 class="section-title" data-aos="fade-right">Nossa história</h2>
       <div class="story-grid">
@@ -592,51 +472,51 @@
           <p>Em uma pequena travessa do 6º arrondissement, nasceu o sonho de trazer a cadência parisiense para o coração do Brasil. <strong>Café Belle Vue</strong> é uma homenagem aos bistrôs escondidos, onde o tempo desacelera e o aroma do café recém-torrado conta histórias.</p>
           <p>Nossos grãos são cultivados nas montanhas da Borgonha e torrados artesanalmente. Cada xícara é um convite: desacelere, sinta o momento. Aqui, a pressa fica do lado de fora.</p>
           <p style="font-size: 1.3rem; font-family: 'Playfair Display'; color: #7a5a44;">— "O verdadeiro luxo é o tempo bem gasto."</p>
-          <a href="#cardapio" style="color: var(--color-caramel); font-weight: 600; margin-top: 1.5rem; display: inline-block; border-bottom: 2px solid transparent; transition: border 0.2s;">Conheça nossos blends →</a>
+          <a href="#cardapio" style="color: var(--color-caramel); font-weight: 600; margin-top: 1.5rem; display: inline-block;">Conheça nossos blends →</a>
         </div>
-        <div class="story-image" data-aos="fade-left" data-aos-delay="150">
-          <img src="https://images.unsplash.com/photo-1554115331131-375e3b3e54b1?q=80&w=1974&auto=format&fit=crop" alt="Interior do Café Belle Vue, bancada de madeira e xícaras" loading="lazy">
+        <div class="story-image parallax-image" data-speed="0.1" data-aos="fade-left" data-aos-delay="150">
+          <img src="https://images.unsplash.com/photo-1554115331131-375e3b3e54b1?q=80&w=1974&auto=format&fit=crop" alt="Interior do Café" loading="lazy">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CARDÁPIO DESTAQUE -->
-  <section id="cardapio">
+  <!-- CARDÁPIO -->
+  <section id="cardapio" class="parallax-section" data-section="cardapio">
     <div class="container">
       <h2 class="section-title" data-aos="fade-right">Sabores de Paris</h2>
-      <p style="font-size: 1.3rem; margin-bottom: 2rem; color: #2c3e2f; font-weight: 350; max-width: 700px; text-shadow: 0 1px 4px rgba(255,255,255,0.3);">Clássicos franceses com um toque contemporâneo</p>
-      <div class="menu-grid">
+      <p style="font-size: 1.3rem; margin-bottom: 2rem; color: white; font-weight: 350; max-width: 700px; text-shadow: 0 1px 4px rgba(0,0,0,0.3);">Clássicos franceses com um toque contemporâneo</p>
+      <div class="menu-grid" id="menuGrid">
         <!-- ITEM 1 -->
-        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="50">
+        <div class="menu-card magnetic-card" data-aos="zoom-in-up" data-aos-delay="50">
           <div class="card-img">
-            <img src="https://images.unsplash.com/photo-1510597079-3b9f61a7b7d0?q=80&w=1974&auto=format&fit=crop" alt="Espresso duplo com crema aveludada" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1510597079-3b9f61a7b7d0?q=80&w=1974&auto=format&fit=crop" alt="Espresso" loading="lazy">
           </div>
           <div class="card-content">
             <h3>Espresso Belle</h3>
-            <p>Blend exclusivo de arábica com notas de chocolate amargo e frutas vermelhas. Corpo aveludado.</p>
+            <p>Blend exclusivo de arábica com notas de chocolate amargo e frutas vermelhas.</p>
             <span class="price">R$ 12,50 <small>70ml</small></span>
           </div>
         </div>
         <!-- ITEM 2 -->
-        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="100">
+        <div class="menu-card magnetic-card" data-aos="zoom-in-up" data-aos-delay="100">
           <div class="card-img">
-            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1926&auto=format&fit=crop" alt="Croissant folhado e dourado" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1926&auto=format&fit=crop" alt="Croissant" loading="lazy">
           </div>
           <div class="card-content">
             <h3>Croissant à la française</h3>
-            <p>Massa folhada laminada à mão, manteiga de origem francesa. Crocante por fora, macio por dentro.</p>
+            <p>Massa folhada laminada à mão, manteiga francesa. Crocante por fora, macio por dentro.</p>
             <span class="price">R$ 18,90</span>
           </div>
         </div>
         <!-- ITEM 3 -->
-        <div class="menu-card" data-aos="zoom-in-up" data-aos-delay="150">
+        <div class="menu-card magnetic-card" data-aos="zoom-in-up" data-aos-delay="150">
           <div class="card-img">
-            <img src="https://images.unsplash.com/photo-1488477304112-4944851de03d?q=80&w=1974&auto=format&fit=crop" alt="Tartelette de limão siciliano" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1488477304112-4944851de03d?q=80&w=1974&auto=format&fit=crop" alt="Tartelette" loading="lazy">
           </div>
           <div class="card-content">
             <h3>Tartelette citron</h3>
-            <p>Massa doce crocante, creme de limão siciliano e merengue italiano levemente tostado.</p>
+            <p>Massa doce crocante, creme de limão siciliano e merengue italiano tostado.</p>
             <span class="price">R$ 24,50</span>
           </div>
         </div>
@@ -644,8 +524,8 @@
     </div>
   </section>
 
-  <!-- LOCALIZAÇÃO E HORÁRIOS -->
-  <section id="localizacao">
+  <!-- LOCALIZAÇÃO -->
+  <section id="localizacao" class="parallax-section" data-section="localizacao">
     <div class="container">
       <h2 class="section-title" data-aos="fade-right">Encontre seu refúgio</h2>
       <div class="info-grid" data-aos="flip-up" data-aos-duration="800">
@@ -667,21 +547,20 @@
               <li><span>Sábado</span> <span>09:00 – 18:00</span></li>
               <li><span>Domingo</span> <span>10:00 – 16:00</span></li>
             </ul>
-            <p style="margin-top: 1rem; font-style: italic; opacity: 0.9;">*Happy hour 17h–19h: 20% off</p>
+            <p style="margin-top: 1rem; font-style: italic;">*Happy hour 17h–19h: 20% off</p>
           </div>
         </div>
       </div>
-      <!-- Mapa conceitual elegante -->
       <div style="margin-top: 2.5rem; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); height: 240px; background: rgba(255,255,255,0.3); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; border: 0.5px solid rgba(255,255,255,0.3);" data-aos="fade-up">
         <div style="text-align: center; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
           <i class="fas fa-map" style="font-size: 3rem; opacity: 0.8; margin-bottom: 0.7rem;"></i>
-          <p style="font-weight: 500; font-size: 1.1rem;">Rua Augusta, 520 – aberto todos os dias<br><span style="font-size: 0.95rem; opacity: 0.9;">(mapa interativo disponível em breve)</span></p>
+          <p style="font-weight: 500; font-size: 1.1rem;">Rua Augusta, 520 – aberto todos os dias<br><span style="font-size: 0.95rem;">(mapa interativo em breve)</span></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER / CONTATO -->
+  <!-- FOOTER -->
   <footer id="contato">
     <div class="container">
       <div class="footer-content" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2.5rem; margin-bottom: 2.5rem;">
@@ -692,25 +571,24 @@
         <div>
           <h4 style="color: white; margin-bottom: 1.2rem; font-size: 1.5rem;">Conecte-se</h4>
           <div class="social" style="display: flex; gap: 1.2rem;">
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-            <a href="#" aria-label="E-mail"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="magnetic-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="magnetic-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="magnetic-btn" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="magnetic-btn" aria-label="E-mail"><i class="fas fa-envelope"></i></a>
           </div>
           <p style="margin-top: 1.8rem;"><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> (11) 98765-4321</p>
           <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> bonjour@bellevuecafe.com.br</p>
         </div>
       </div>
-      <div class="copyright">
-        <p>© 2026 Café Belle Vue — Édition Winter '26. Inspirado em Paris, feito no Brasil.</p>
+      <div class="copyright" style="text-align: center; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 2rem; font-size: 0.95rem;">
+        <p>© 2026 Café Belle Vue — Édition Winter '26. Paris em cada gole.</p>
       </div>
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Inicializa AOS com easing Shopify
+    // Inicializa AOS
     AOS.init({
       duration: 850,
       once: true,
@@ -719,24 +597,20 @@
       easing: 'cubic-bezier(0.2, 0, 0, 1)'
     });
 
-    // Menu mobile
+    // ---------- MENU MOBILE ----------
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
-
     function toggleMenu() {
       hamburger.classList.toggle('active');
       navLinks.classList.toggle('active');
     }
-
     function closeMenu() {
       hamburger.classList.remove('active');
       navLinks.classList.remove('active');
     }
-
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
-
     window.addEventListener('resize', function() {
       if (window.innerWidth > 768) {
         navLinks.classList.remove('active');
@@ -744,14 +618,112 @@
       }
     });
 
-    // Fallback: se o vídeo falhar, exibe imagem estática
-    const bgVideo = document.querySelector('.background-video');
-    if (bgVideo) {
-      bgVideo.addEventListener('error', function() {
-        this.style.display = 'none';
-        document.querySelector('.video-overlay').style.background = "url('https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat fixed";
+    // ---------- 1. TRANSIÇÃO DE CORES NO OVERLAY ----------
+    const overlay = document.getElementById('videoOverlay');
+    const sections = document.querySelectorAll('section[data-section]');
+    function updateOverlayColor() {
+      let scrollY = window.scrollY;
+      let winHeight = window.innerHeight;
+      let maxScroll = document.body.scrollHeight - winHeight;
+      let progress = maxScroll ? scrollY / maxScroll : 0;
+      
+      // Gradiente base: mais quente (caramelo) no início, mais frio (espresso) no fim
+      let r1 = 44, g1 = 62, b1 = 47; // deep espresso
+      let r2 = 120, g2 = 80, b2 = 60; // tom caramelo
+      
+      let r = Math.round(r1 + (r2 - r1) * progress);
+      let g = Math.round(g1 + (g2 - g1) * progress);
+      let b = Math.round(b1 + (b2 - b1) * progress);
+      
+      overlay.style.background = `radial-gradient(ellipse at 70% 40%, rgba(${r},${g},${b},0.4) 0%, rgba(20,15,10,0.7) 100%)`;
+    }
+
+    // ---------- 2. PARALLAX SUAVE NAS IMAGENS ----------
+    const parallaxImages = document.querySelectorAll('.parallax-image');
+    function updateParallax() {
+      parallaxImages.forEach(img => {
+        const speed = parseFloat(img.dataset.speed) || 0.1;
+        const rect = img.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const relativeCenter = (rect.top + rect.height / 2) / viewportHeight;
+        const offset = (relativeCenter - 0.5) * speed * 100;
+        img.style.transform = `translateY(${offset}px)`;
       });
     }
+
+    // ---------- 3. MAGNETIC BUTTONS ----------
+    const magneticElements = document.querySelectorAll('.magnetic-btn, .btn, .social a');
+    function initMagnetic() {
+      magneticElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          if (window.innerWidth <= 768) return;
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          el.style.transform = `translate(${x * 0.2}px, ${y * 0.1}px) scale(1.02)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = 'translate(0, 0) scale(1)';
+        });
+      });
+    }
+
+    // ---------- 4. VÍDEO COM SLOW MOTION PROGRESSIVO ----------
+    const video = document.getElementById('bgVideo');
+    function updateVideoPlayback() {
+      if (!video) return;
+      let scrollY = window.scrollY;
+      let maxScroll = document.body.scrollHeight - window.innerHeight;
+      let progress = maxScroll ? scrollY / maxScroll : 0;
+      // Playback rate: de 1.0 (topo) até 0.4 (fim) – mais lento ao rolar
+      let rate = Math.max(0.4, 1 - progress * 0.6);
+      video.playbackRate = rate;
+    }
+
+    // ---------- 5. SCROLL-DRIVEN NARRATIVE + 3D CONTINUIDADE ESPACIAL ----------
+    // Aplica rotação 3D nas seções baseada no scroll
+    const sections3D = document.querySelectorAll('section:not(.hero-section)');
+    function update3DContinuity() {
+      let scrollY = window.scrollY;
+      sections3D.forEach((sec, index) => {
+        const rect = sec.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        // Calcula o quão central a seção está na viewport
+        const centerDist = (rect.top + rect.height / 2) - viewportHeight / 2;
+        // Rotação em Y (eixo horizontal) suave: -1deg a 1deg
+        let rotateY = Math.max(-1, Math.min(1, centerDist * 0.002));
+        // Pequeno deslocamento em Z para sensação de profundidade
+        let translateZ = Math.abs(centerDist) * 0.05;
+        sec.style.transform = `perspective(1200px) rotateY(${rotateY}deg) translateZ(${translateZ}px)`;
+      });
+    }
+
+    // ---------- LISTENER DE SCROLL (otimizado) ----------
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateOverlayColor();
+          updateParallax();
+          updateVideoPlayback();
+          update3DContinuity();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    onScroll(); // inicial
+
+    // ---------- INICIALIZA MAGNETIC ----------
+    initMagnetic();
+
+    // ---------- FALLBACK DO VÍDEO ----------
+    video.addEventListener('error', function() {
+      this.style.display = 'none';
+      overlay.style.background = "url('https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat fixed";
+    });
   </script>
   <noscript>
     <style>.background-video { display: none; } .video-overlay { background: url('https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') center/cover no-repeat fixed; }</style>
