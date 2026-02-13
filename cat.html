@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Driven Narrative – Experimental UX</title>
+
+<style>
+:root {
+  --progress: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0d0d0f;
+  color: white;
+  overflow-x: hidden;
+}
+
+section {
+  position: relative;
+  min-height: 200vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vw;
+}
+
+/* HERO */
+
+.hero {
+  min-height: 100vh;
+  text-align: center;
+  background: radial-gradient(circle at center, #1e1e28 0%, #0d0d0f 70%);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  opacity: 0.8;
+}
+
+/* CARD SECTION */
+
+.card-wrapper {
+  perspective: 1200px;
+}
+
+.card {
+  width: min(90vw, 420px);
+  aspect-ratio: 3/4;
+  background: #111;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: scale(calc(1 + var(--progress) * 0.5))
+             rotateX(calc(var(--progress) * 10deg));
+  transition: transform 0.1s linear;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.eye-zoom {
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=800') center/cover;
+  transform: scale(calc(1 + var(--progress) * 2));
+  opacity: calc(var(--progress));
+  transition: transform 0.1s linear;
+}
+
+/* GRAIN EFFECT */
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: -50%;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: calc(var(--progress) * 0.4);
+  mix-blend-mode: overlay;
+  animation: grain 1s steps(2) infinite;
+}
+
+@keyframes grain {
+  0%,100% { transform: translate(0,0); }
+  20% { transform: translate(-5%,5%); }
+  40% { transform: translate(-10%,0%); }
+  60% { transform: translate(5%,10%); }
+  80% { transform: translate(5%,-5%); }
+}
+
+/* TRANSITION SECTION */
+
+.story {
+  background: radial-gradient(circle at center, #111 0%, #000 80%);
+  opacity: calc(var(--progress));
+  transform: translateY(calc((1 - var(--progress)) * 100px));
+  transition: transform 0.1s linear;
+  text-align: center;
+}
+
+.story h2 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  margin-bottom: 20px;
+}
+
+.story p {
+  max-width: 500px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* MOBILE FIRST OPTIMIZATION */
+
+@media (max-width: 768px) {
+  section {
+    padding: 8vw;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="grain"></div>
+
+<section class="hero">
+  <h1>Scroll para entrar na narrativa</h1>
+</section>
+
+<section class="card-section">
+  <div class="card-wrapper">
+    <div class="card">
+      <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=800" alt="Gato">
+      <div class="eye-zoom"></div>
+    </div>
+  </div>
+</section>
+
+<section class="story">
+  <div>
+    <h2>O mundo pelo olhar do gato</h2>
+    <p>
+      Cada scroll é uma aproximação. Cada aproximação é uma mudança de perspectiva.
+      O ambiente se dissolve, a textura assume o controle e a narrativa se transforma.
+    </p>
+  </div>
+</section>
+
+<script>
+const root = document.documentElement
+const cardSection = document.querySelector(".card-section")
+
+function updateScroll() {
+  const rect = cardSection.getBoundingClientRect()
+  const windowHeight = window.innerHeight
+  
+  let progress = 1 - (rect.top / windowHeight)
+  progress = Math.min(Math.max(progress, 0), 1)
+
+  root.style.setProperty("--progress", progress)
+}
+
+window.addEventListener("scroll", () => {
+  requestAnimationFrame(updateScroll)
+})
+
+updateScroll()
+</script>
+
+</body>
+</html>
