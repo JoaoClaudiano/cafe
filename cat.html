@@ -3,182 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scroll Driven Narrative – Experimental UX</title>
+<title>Immersive Scroll Storytelling</title>
 
 <style>
-:root {
-  --progress: 0;
+:root{
+  --progress:0;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  background:#0b0c10;
+  color:white;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
-html, body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #0d0d0f;
-  color: white;
-  overflow-x: hidden;
+/* ---------- STRUCTURE ---------- */
+
+section{
+  min-height:200vh;
+  padding:12vw;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
 }
 
-section {
-  position: relative;
-  min-height: 200vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10vw;
+.hero{
+  min-height:120vh;
+  background:radial-gradient(circle at center,#1c1d25 0%,#0b0c10 70%);
+  text-align:center;
 }
 
-/* HERO */
-
-.hero {
-  min-height: 100vh;
-  text-align: center;
-  background: radial-gradient(circle at center, #1e1e28 0%, #0d0d0f 70%);
+.hero h1{
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:-0.03em;
+  opacity:.85;
 }
 
-.hero h1 {
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  opacity: 0.8;
+/* ---------- PARALLAX ---------- */
+
+.parallax-layer{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  transform:translateY(calc(var(--progress) * -50px));
+  opacity:.25;
+  pointer-events:none;
 }
 
-/* CARD SECTION */
+/* ---------- CARD ---------- */
 
-.card-wrapper {
-  perspective: 1200px;
+.card{
+  width:min(90vw,480px);
+  aspect-ratio:3/4;
+  border-radius:28px;
+  overflow:hidden;
+  transform:scale(calc(1 + var(--progress) * .3))
+            rotateX(calc(var(--progress) * 8deg));
+  transition:transform .1s linear;
+  box-shadow:0 40px 120px rgba(0,0,0,.7);
 }
 
-.card {
-  width: min(90vw, 420px);
-  aspect-ratio: 3/4;
-  background: #111;
-  border-radius: 24px;
-  overflow: hidden;
-  position: relative;
-  transform-style: preserve-3d;
-  transform: scale(calc(1 + var(--progress) * 0.5))
-             rotateX(calc(var(--progress) * 10deg));
-  transition: transform 0.1s linear;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.zoom-layer{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  transform:scale(calc(1 + var(--progress) * 1.8));
+  opacity:calc(var(--progress));
 }
 
-.eye-zoom {
-  position: absolute;
-  inset: 0;
-  background: url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=800') center/cover;
-  transform: scale(calc(1 + var(--progress) * 2));
-  opacity: calc(var(--progress));
-  transition: transform 0.1s linear;
+/* ---------- TEXT BLOCK ---------- */
+
+.text-block{
+  max-width:650px;
+  margin-top:40px;
+  line-height:1.7;
+  opacity:.75;
 }
 
-/* GRAIN EFFECT */
+/* ---------- STORY SECTIONS ---------- */
 
-.grain {
-  pointer-events: none;
-  position: fixed;
-  inset: -50%;
-  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-  opacity: calc(var(--progress) * 0.4);
-  mix-blend-mode: overlay;
-  animation: grain 1s steps(2) infinite;
+.story-dark{
+  background:radial-gradient(circle at center,#111 0%,#000 90%);
 }
 
-@keyframes grain {
-  0%,100% { transform: translate(0,0); }
-  20% { transform: translate(-5%,5%); }
-  40% { transform: translate(-10%,0%); }
-  60% { transform: translate(5%,10%); }
-  80% { transform: translate(5%,-5%); }
+.story-light{
+  background:#f5f5f5;
+  color:#111;
 }
 
-/* TRANSITION SECTION */
+/* ---------- CANVAS ---------- */
 
-.story {
-  background: radial-gradient(circle at center, #111 0%, #000 80%);
-  opacity: calc(var(--progress));
-  transform: translateY(calc((1 - var(--progress)) * 100px));
-  transition: transform 0.1s linear;
-  text-align: center;
+canvas{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
 }
 
-.story h2 {
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  margin-bottom: 20px;
-}
+/* ---------- MOBILE ---------- */
 
-.story p {
-  max-width: 500px;
-  opacity: 0.7;
-  line-height: 1.6;
-}
-
-/* MOBILE FIRST OPTIMIZATION */
-
-@media (max-width: 768px) {
-  section {
-    padding: 8vw;
-  }
+@media(max-width:768px){
+  section{padding:10vw}
 }
 </style>
 </head>
-
 <body>
 
-<div class="grain"></div>
+<canvas id="webgl"></canvas>
 
+<!-- HERO -->
 <section class="hero">
-  <h1>Scroll para entrar na narrativa</h1>
+  <h1>Uma Experiência de Scroll Cinematográfica</h1>
 </section>
 
-<section class="card-section">
-  <div class="card-wrapper">
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=800" alt="Gato">
-      <div class="eye-zoom"></div>
-    </div>
+<!-- INTRO -->
+<section>
+  <div class="parallax-layer" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400');"></div>
+  <h2>Scroll é Narrativa</h2>
+  <div class="text-block">
+    Cada gesto vertical é uma transição espacial. Não navegamos páginas,
+    atravessamos ambientes.
   </div>
 </section>
 
-<section class="story">
-  <div>
-    <h2>O mundo pelo olhar do gato</h2>
-    <p>
-      Cada scroll é uma aproximação. Cada aproximação é uma mudança de perspectiva.
-      O ambiente se dissolve, a textura assume o controle e a narrativa se transforma.
-    </p>
+<!-- GATO -->
+<section class="story-dark">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=1000">
+    <div class="zoom-layer" style="background-image:url('https://images.unsplash.com/photo-1518791841217-8f162f1e1131?q=80&w=1000');"></div>
+  </div>
+  <div class="text-block">
+    Aproximar-se é mudar o contexto. A superfície deixa de ser objeto.
+    Torna-se ambiente.
   </div>
 </section>
+
+<!-- TRANSIÇÃO SENSORIAL -->
+<section>
+  <h2>Dentro do Olhar</h2>
+  <div class="text-block">
+    Textura. Granulação. Frequência.
+    A imagem deixa de ser fotografia e se transforma em atmosfera.
+  </div>
+</section>
+
+<!-- ARQUITETURA -->
+<section class="story-light">
+  <h2>Espaço Arquitetônico</h2>
+  <div class="text-block">
+    Continuidade espacial significa nunca cortar abruptamente.
+    Cada seção emerge da anterior.
+  </div>
+</section>
+
+<!-- FOTOGRAFIA -->
+<section class="story-dark">
+  <h2>Luz e Profundidade</h2>
+  <div class="text-block">
+    Scroll-driven storytelling permite conduzir atenção,
+    ritmo e percepção.
+  </div>
+</section>
+
+<!-- ENCERRAMENTO -->
+<section>
+  <h2>Fim é apenas transição</h2>
+  <div class="text-block">
+    Este não é um site. É uma experiência espacial controlada por gesto.
+  </div>
+</section>
+
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
 
 <script>
-const root = document.documentElement
-const cardSection = document.querySelector(".card-section")
+/* -----------------------------
+   SCROLL PROGRESS GLOBAL
+------------------------------*/
 
-function updateScroll() {
-  const rect = cardSection.getBoundingClientRect()
-  const windowHeight = window.innerHeight
-  
-  let progress = 1 - (rect.top / windowHeight)
-  progress = Math.min(Math.max(progress, 0), 1)
+const root=document.documentElement
+const maxScroll=document.body.scrollHeight-window.innerHeight
 
-  root.style.setProperty("--progress", progress)
-}
-
-window.addEventListener("scroll", () => {
-  requestAnimationFrame(updateScroll)
+window.addEventListener("scroll",()=>{
+  const progress=window.scrollY/maxScroll
+  root.style.setProperty("--progress",progress)
 })
 
-updateScroll()
+/* -----------------------------
+   THREE.JS BACKGROUND SHADER
+------------------------------*/
+
+const scene=new THREE.Scene()
+const camera=new THREE.OrthographicCamera(-1,1,1,-1,0,1)
+const renderer=new THREE.WebGLRenderer({
+  canvas:document.getElementById("webgl"),
+  alpha:true
+})
+
+renderer.setSize(window.innerWidth,window.innerHeight)
+
+const geometry=new THREE.PlaneGeometry(2,2)
+
+const material=new THREE.ShaderMaterial({
+  uniforms:{
+    u_time:{value:0},
+    u_progress:{value:0}
+  },
+  vertexShader:`
+    varying vec2 vUv;
+    void main(){
+      vUv=uv;
+      gl_Position=vec4(position,1.0);
+    }
+  `,
+  fragmentShader:`
+    uniform float u_time;
+    uniform float u_progress;
+    varying vec2 vUv;
+
+    float noise(vec2 p){
+      return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);
+    }
+
+    void main(){
+      float distortion=sin(vUv.y*10.0 + u_time)*0.02*u_progress;
+      vec2 uv=vUv + vec2(distortion,0.0);
+      float grain=noise(uv*vec2(800.0))*0.15*u_progress;
+      gl_FragColor=vec4(vec3(grain),0.08*u_progress);
+    }
+  `,
+  transparent:true
+})
+
+const mesh=new THREE.Mesh(geometry,material)
+scene.add(mesh)
+
+function animate(){
+  requestAnimationFrame(animate)
+  material.uniforms.u_time.value+=0.03
+  material.uniforms.u_progress.value=window.scrollY/maxScroll
+  renderer.render(scene,camera)
+}
+
+animate()
+
+window.addEventListener("resize",()=>{
+  renderer.setSize(window.innerWidth,window.innerHeight)
+})
 </script>
 
 </body>
