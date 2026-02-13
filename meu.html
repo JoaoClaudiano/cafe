@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MA | Minimalist Architecture</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #f0f0f0;
+            --text-muted: #888;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden; /* Hide scrollbar trigger */
+        }
+
+        /* --- BACKGROUND LAYER (FIXED) --- */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0; /* Hidden by default */
+            /* Initial state for transition */
+            transform: scale(1.1); 
+            filter: grayscale(100%) brightness(0.4);
+            will-change: transform, opacity, filter;
+            transition: opacity 1s ease; /* Fallback */
+        }
+
+        /* Primeira imagem visível */
+        .bg-image.active {
+            opacity: 1;
+        }
+
+        /* Overlay para legibilidade */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* --- CONTENT LAYER (SCROLLABLE) --- */
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            /* Border debugging helps see sections */
+            /* border-bottom: 1px solid rgba(255,255,255,0.1); */
+        }
+
+        /* Typography Styling */
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        h1, h2 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            mix-blend-mode: overlay; /* Blend with image for high-end look */
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 12vw, 8rem);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-style: italic;
+        }
+
+        .description {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 400px;
+            line-height: 1.6;
+            margin-top: 2rem;
+            color: #ccc;
+            font-weight: 300;
+            backdrop-filter: blur(10px); /* Glassmorphism subtle */
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-left: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Alignments */
+        .align-right {
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .align-center {
+            align-items: center;
+            text-align: center;
+        }
+
+        /* UI Elements */
+        .scroll-line {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 100px;
+            width: 1px;
+            background: rgba(255,255,255,0.2);
+            z-index: 100;
+        }
+        .scroll-progress {
+            width: 100%;
+            height: 0%;
+            background: #fff;
+            display: block;
+        }
+
+        /* Footer / Contact */
+        .contact-section {
+            background: #0a0a0a; /* Solid background for footer */
+            color: white;
+            min-height: 50vh;
+        }
+        
+        .cta-btn {
+            margin-top: 3rem;
+            padding: 1rem 3rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-btn:hover {
+            background: white;
+            color: black;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-container">
+        <img src="https://images.unsplash.com/photo-1486718448742-163732cd1544?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-1 active" alt="Concrete Minimal">
+        
+        <img src="https://images.unsplash.com/photo-1506146332389-18140dc7b2fb?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-2" alt="Shadows and Light">
+        
+        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-3" alt="Interior Void">
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="scroll-line"><span class="scroll-progress"></span></div>
+
+    <main>
+        
+        <section class="trigger-1">
+            <span class="label">01. Introdução</span>
+            <h1 class="hero-title">O Silêncio<br>da Forma.</h1>
+            <p class="description">
+                Arquitetura não é sobre preencher o espaço. É sobre moldar o vazio. Minimalismo como estado de espírito, não apenas estética.
+            </p>
+        </section>
+
+        <section class="align-right trigger-2">
+            <span class="label">02. Luz & Sombra</span>
+            <h2 class="section-title">Essência<br>Tangível</h2>
+            <p class="description" style="border-left: none; border-right: 1px solid rgba(255,255,255,0.2);">
+                Removemos o desnecessário para revelar o essencial. A luz natural esculpe nossas estruturas, mudando a percepção a cada hora do dia.
+            </p>
+        </section>
+
+        <section class="align-center trigger-3">
+            <span class="label">03. O Vazio</span>
+            <h2 class="section-title">Espaço Puro</h2>
+            <p class="description">
+                Design residencial e comercial focado na experiência humana. Onde a mente descansa e a criatividade desperta.
+            </p>
+        </section>
+
+        <section class="contact-section align-center">
+            <h2 class="section-title" style="font-size: 3rem;">Vamos criar?</h2>
+            <p style="color: #666; margin-top: 1rem;">São Paulo — Lisboa — Tokyo</p>
+            <button class="cta-btn">Iniciar Projeto</button>
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 1. SETUP SMOOTH SCROLL (Lenis)
+        const lenis = new Lenis({
+            lerp: 0.08, // Mais "pesado" e elegante para arquitetura
+            smooth: true
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // 2. GSAP SETUP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Utility: Animação de Texto (Fade Up)
+        const texts = gsap.utils.toArray('.description, h1, h2, .label');
+        texts.forEach(text => {
+            gsap.from(text, {
+                y: 50,
+                opacity: 0,
+                duration: 1.5,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: text,
+                    start: "top 85%", // Inicia quando o topo do texto atinge 85% da tela
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // 3. CORE LOGIC: IMAGE TRANSITIONS & SATURATION EFFECT
+        
+        // Função para animar a entrada e saída das imagens de fundo
+        function animateBackground(index) {
+            const bgImage = document.querySelector(`.bg-${index}`);
+            
+            // O "Timeline" permite controlar a sequência: Opacidade -> Escala -> Saturação
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: `.trigger-${index}`,
+                    start: "top center", // Quando a seção chega no meio da tela
+                    end: "bottom center",
+                    scrub: 1, // Suaviza a animação atrelada ao scroll
+                    toggleActions: "play reverse play reverse"
+                }
+            });
+
+            // Estado Inicial (definido no CSS, mas reforçado aqui)
+            // A imagem começa Cinza (Grayscale 1) e Escura (Brightness 0.4)
+            
+            // Animação para o estado "Ativo" (Colorido e Brilhante)
+            tl.to(bgImage, {
+                opacity: 1,
+                scale: 1, // Zoom out sutil (de 1.1 para 1)
+                filter: "grayscale(0%) brightness(0.8)", // Transição mágica de cor
+                duration: 1,
+                ease: "power2.inOut"
+            });
+
+            // IMPORTANTE: Esconder imagens anteriores para não sobrepor
+            if (index > 1) {
+                gsap.to(`.bg-${index - 1}`, {
+                    opacity: 0,
+                    scrollTrigger: {
+                        trigger: `.trigger-${index}`,
+                        start: "top center",
+                        end: "top 20%",
+                        scrub: true
+                    }
+                });
+            }
+        }
+
+        // Apply animations to sections
+        animateBackground(1); // Hero starts active, but we define animations anyway
+        animateBackground(2);
+        animateBackground(3);
+
+        // 4. SCROLL PROGRESS BAR
+        gsap.to(".scroll-progress", {
+            height: "100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "main",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true
+            }
+        });
+
+    </script>
+</body>
+</html>
