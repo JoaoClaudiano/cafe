@@ -87,6 +87,35 @@
             position: relative;
             z-index: 10;
         }
+        .imagem-fundo {
+          filter: grayscale(100%) brightness(0.8);
+          transition: filter 1s ease-out;
+        }
+        
+        /* Quando o usuário interage ou a seção entra em foco */
+        .imagem-fundo:hover, .secao-ativa .imagem-fundo {
+          filter: grayscale(0%) brightness(1);
+        }
+        
+        @keyframes zoomStorytelling {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.1); }
+        }
+        
+        .container-imagem img {
+          animation: zoomStorytelling 20s linear infinite alternate;
+          transform-origin: center; /* Você pode mudar para 'top' se o prédio for alto */
+        }
+        .imagem-predio {
+          /* Começa "cortada" seguindo uma linha diagonal do prédio */
+          clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
+          transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        
+        .imagem-predio.visivel {
+          /* Revela a imagem inteira */
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
 
         section {
             min-height: 100vh;
