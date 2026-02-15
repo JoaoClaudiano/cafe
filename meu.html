@@ -28,21 +28,11 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             font-family: var(--font-sans);
-            overflow-x: hidden; /* Hide scrollbar trigger */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        /* Camada de grão sobre a imagem */
-        .container-imagem::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          opacity: 0.25; /* Ajuste a intensidade aqui */
-          pointer-events: none;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-        /* --- BACKGROUND LAYER (FIXED) --- */
+
+        /* --- CAMADA DE FUNDO E TEXTURA --- */
         .bg-container {
             position: fixed;
             top: 0;
@@ -50,226 +40,161 @@
             width: 100%;
             height: 100vh;
             z-index: -1;
+            background: var(--bg-color);
             overflow: hidden;
+        }
+
+        /* Efeito de Grão (Granulado de Cinema) */
+        .bg-container::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/feTurbulence%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         .bg-image {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
-            opacity: 0; /* Hidden by default */
-            /* Initial state for transition */
-            transform: scale(1.1); 
-            filter: grayscale(100%) brightness(0.4);
+            opacity: 0;
+            filter: grayscale(100%) brightness(0.3);
+            transform: scale(1.1);
             will-change: transform, opacity, filter;
-            transition: opacity 1s ease; /* Fallback */
         }
 
-        /* Primeira imagem visível */
-        .bg-image.active {
-            opacity: 1;
-        }
+        .bg-image.active { opacity: 1; }
 
-        /* Overlay para legibilidade */
-        .overlay {
+        .overlay-vignette {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.4) 100%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
         }
 
-        /* --- CONTENT LAYER (SCROLLABLE) --- */
-        main {
-            position: relative;
-            z-index: 10;
-        }
-        .imagem-fundo {
-          filter: grayscale(100%) brightness(0.8);
-          transition: filter 1s ease-out;
-        }
-        
-        /* Quando o usuário interage ou a seção entra em foco */
-        .imagem-fundo:hover, .secao-ativa .imagem-fundo {
-          filter: grayscale(0%) brightness(1);
-        }
-        
-        @keyframes zoomStorytelling {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.1); }
-        }
-        
-        .container-imagem img {
-          animation: zoomStorytelling 20s linear infinite alternate;
-          transform-origin: center; /* Você pode mudar para 'top' se o prédio for alto */
-        }
-        .imagem-predio {
-          /* Começa "cortada" seguindo uma linha diagonal do prédio */
-          clip-path: polygon(0 0, 0% 0, 0% 100%, 0% 100%);
-          transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        
-        .imagem-predio.visivel {
-          /* Revela a imagem inteira */
-          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        }
+        /* --- CONTEÚDO --- */
+        main { position: relative; z-index: 10; }
 
         section {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 2rem;
-            position: relative;
-            /* Border debugging helps see sections */
-            /* border-bottom: 1px solid rgba(255,255,255,0.1); */
+            padding: 10vw;
         }
 
-        /* Typography Styling */
         .label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.4em;
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
             display: block;
+            overflow: hidden;
         }
 
         h1, h2 {
             font-family: var(--font-serif);
             font-weight: 400;
             line-height: 1.1;
-            mix-blend-mode: overlay; /* Blend with image for high-end look */
-        }
-
-        .hero-title {
-            font-size: clamp(3.5rem, 12vw, 8rem);
             margin-bottom: 2rem;
         }
 
-        .section-title {
-            font-size: clamp(2.5rem, 8vw, 6rem);
-            font-style: italic;
-        }
+        .hero-title { font-size: clamp(3rem, 10vw, 7rem); }
+        .section-title { font-size: clamp(2.5rem, 8vw, 5rem); font-style: italic; }
 
         .description {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            max-width: 400px;
-            line-height: 1.6;
-            margin-top: 2rem;
-            color: #ccc;
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            max-width: 450px;
+            line-height: 1.8;
+            color: #bbb;
             font-weight: 300;
-            backdrop-filter: blur(10px); /* Glassmorphism subtle */
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 1.5rem;
+            border-left: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Alignments */
-        .align-right {
-            align-items: flex-end;
-            text-align: right;
-        }
-
-        .align-center {
-            align-items: center;
-            text-align: center;
-        }
+        /* Alinhamentos */
+        .align-right { align-items: flex-end; text-align: right; }
+        .align-right .description { border-left: none; border-right: 1px solid rgba(255,255,255,0.1); padding-left: 0; padding-right: 1.5rem; }
+        .align-center { align-items: center; text-align: center; }
+        .align-center .description { border-left: none; padding-left: 0; }
 
         /* UI Elements */
         .scroll-line {
             position: fixed;
-            right: 2rem;
-            top: 50%;
+            right: 3rem; top: 50%;
             transform: translateY(-50%);
-            height: 100px;
-            width: 1px;
-            background: rgba(255,255,255,0.2);
+            height: 150px; width: 1px;
+            background: rgba(255,255,255,0.1);
             z-index: 100;
         }
         .scroll-progress {
-            width: 100%;
-            height: 0%;
-            background: #fff;
-            display: block;
+            width: 100%; height: 0%;
+            background: #fff; display: block;
         }
 
-        /* Footer / Contact */
-        .contact-section {
-            background: #0a0a0a; /* Solid background for footer */
-            color: white;
-            min-height: 50vh;
-        }
+        .contact-section { background: #000; min-height: 80vh; }
         
         .cta-btn {
             margin-top: 3rem;
-            padding: 1rem 3rem;
+            padding: 1.2rem 3.5rem;
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             color: white;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            font-size: 0.75rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        
-        .cta-btn:hover {
-            background: white;
-            color: black;
-        }
+        .cta-btn:hover { background: white; color: black; transform: translateY(-5px); }
 
     </style>
 </head>
 <body>
 
     <div class="bg-container">
-        <img src="https://images.unsplash.com/photo-1486718448742-163732cd1544?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-1 active" alt="Concrete Minimal">
-        
-        <img src="https://images.unsplash.com/photo-1506146332389-18140dc7b2fb?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-2" alt="Shadows and Light">
-        
-        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" class="bg-image bg-3" alt="Interior Void">
+        <img src="https://images.unsplash.com/photo-1486718448742-163732cd1544?q=80&w=2000" class="bg-image bg-1" alt="Arquitetura 1">
+        <img src="https://images.unsplash.com/photo-1506146332389-18140dc7b2fb?q=80&w=2000" class="bg-image bg-2" alt="Arquitetura 2">
+        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000" class="bg-image bg-3" alt="Arquitetura 3">
+        <div class="overlay-vignette"></div>
     </div>
-
-    <div class="overlay"></div>
 
     <div class="scroll-line"><span class="scroll-progress"></span></div>
 
     <main>
-        
         <section class="trigger-1">
             <span class="label">01. Introdução</span>
-            <h1 class="hero-title">O Silêncio<br>da Forma.</h1>
-            <p class="description">
+            <h1 class="hero-title reveal">O Silêncio<br>da Forma.</h1>
+            <p class="description reveal">
                 Arquitetura não é sobre preencher o espaço. É sobre moldar o vazio. Minimalismo como estado de espírito, não apenas estética.
             </p>
         </section>
 
         <section class="align-right trigger-2">
             <span class="label">02. Luz & Sombra</span>
-            <h2 class="section-title">Essência<br>Tangível</h2>
-            <p class="description" style="border-left: none; border-right: 1px solid rgba(255,255,255,0.2);">
+            <h2 class="section-title reveal">Essência<br>Tangível</h2>
+            <p class="description reveal">
                 Removemos o desnecessário para revelar o essencial. A luz natural esculpe nossas estruturas, mudando a percepção a cada hora do dia.
             </p>
         </section>
 
         <section class="align-center trigger-3">
             <span class="label">03. O Vazio</span>
-            <h2 class="section-title">Espaço Puro</h2>
-            <p class="description">
+            <h2 class="section-title reveal">Espaço Puro</h2>
+            <p class="description reveal">
                 Design residencial e comercial focado na experiência humana. Onde a mente descansa e a criatividade desperta.
             </p>
         </section>
 
         <section class="contact-section align-center">
-            <h2 class="section-title" style="font-size: 3rem;">Vamos criar?</h2>
-            <p style="color: #666; margin-top: 1rem;">São Paulo — Lisboa — Tokyo</p>
+            <h2 class="section-title">Vamos criar?</h2>
+            <p style="color: #666; letter-spacing: 0.1em;">SÃO PAULO — LISBOA — TOKYO</p>
             <button class="cta-btn">Iniciar Projeto</button>
         </section>
-
     </main>
 
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
@@ -277,85 +202,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <script>
-        // 1. SETUP SMOOTH SCROLL (Lenis)
-        const lenis = new Lenis({
-            lerp: 0.08, // Mais "pesado" e elegante para arquitetura
-            smooth: true
-        });
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
+        // 1. SMOOTH SCROLL (Lenis)
+        const lenis = new Lenis({ lerp: 0.07, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. GSAP SETUP
+        // 2. GSAP & SCROLLTRIGGER
         gsap.registerPlugin(ScrollTrigger);
 
-        // Utility: Animação de Texto (Fade Up)
-        const texts = gsap.utils.toArray('.description, h1, h2, .label');
-        texts.forEach(text => {
-            gsap.from(text, {
-                y: 50,
+        // Animação de Revelação de Texto (Fade + Slide Up)
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 30,
                 opacity: 0,
                 duration: 1.5,
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: text,
-                    start: "top 85%", // Inicia quando o topo do texto atinge 85% da tela
-                    toggleActions: "play none none reverse"
-                }
+                ease: "power4.out"
             });
         });
 
-        // 3. CORE LOGIC: IMAGE TRANSITIONS & SATURATION EFFECT
-        
-        // Função para animar a entrada e saída das imagens de fundo
-        function animateBackground(index) {
-            const bgImage = document.querySelector(`.bg-${index}`);
+        // 3. STORYTELLING VISUAL (Imagens de Fundo)
+        function setupBgTransition(index) {
+            const img = document.querySelector(`.bg-${index}`);
             
-            // O "Timeline" permite controlar a sequência: Opacidade -> Escala -> Saturação
-            const tl = gsap.timeline({
+            // Timeline para a entrada (Saturação + Zoom Out)
+            gsap.timeline({
                 scrollTrigger: {
                     trigger: `.trigger-${index}`,
-                    start: "top center", // Quando a seção chega no meio da tela
-                    end: "bottom center",
-                    scrub: 1, // Suaviza a animação atrelada ao scroll
-                    toggleActions: "play reverse play reverse"
+                    start: "top 80%",
+                    end: "top 20%",
+                    scrub: 1.5,
                 }
-            });
-
-            // Estado Inicial (definido no CSS, mas reforçado aqui)
-            // A imagem começa Cinza (Grayscale 1) e Escura (Brightness 0.4)
-            
-            // Animação para o estado "Ativo" (Colorido e Brilhante)
-            tl.to(bgImage, {
+            })
+            .to(img, {
                 opacity: 1,
-                scale: 1, // Zoom out sutil (de 1.1 para 1)
-                filter: "grayscale(0%) brightness(0.8)", // Transição mágica de cor
-                duration: 1,
-                ease: "power2.inOut"
+                filter: "grayscale(0%) brightness(0.7)",
+                scale: 1, // Volta do 1.1 para o 1.0 (revelando as linhas do prédio)
+                ease: "none"
             });
 
-            // IMPORTANTE: Esconder imagens anteriores para não sobrepor
-            if (index > 1) {
-                gsap.to(`.bg-${index - 1}`, {
-                    opacity: 0,
+            // Timeline para a saída (Desaparecer quando a próxima chegar)
+            if (index < 3) {
+                gsap.to(img, {
                     scrollTrigger: {
-                        trigger: `.trigger-${index}`,
-                        start: "top center",
+                        trigger: `.trigger-${index + 1}`,
+                        start: "top 80%",
                         end: "top 20%",
-                        scrub: true
-                    }
+                        scrub: true,
+                    },
+                    opacity: 0,
+                    scale: 0.95,
+                    filter: "grayscale(100%) brightness(0.2)"
                 });
             }
         }
 
-        // Apply animations to sections
-        animateBackground(1); // Hero starts active, but we define animations anyway
-        animateBackground(2);
-        animateBackground(3);
+        [1, 2, 3].forEach(index => setupBgTransition(index));
 
-        // 4. SCROLL PROGRESS BAR
+        // 4. BARRA DE PROGRESSO
         gsap.to(".scroll-progress", {
             height: "100%",
             ease: "none",
@@ -366,7 +275,6 @@
                 scrub: true
             }
         });
-
     </script>
 </body>
 </html>
